@@ -38,8 +38,8 @@ const validResponseRegex = /(2\d\d)/;
  */
 
 /**
- * @function post
- * @description Call the ServiceNow POST API..
+ * @function get
+ * @description Call the ServiceNow GET API.
  *
  * @param {string} serviceNowTable - The table target of the ServiceNow table API.
  * @param {iapCallback} callback - Callback a function.
@@ -47,7 +47,7 @@ const validResponseRegex = /(2\d\d)/;
  *   Will be HTML text if hibernating instance.
  * @param {error} callback.error - The error property of callback.
  */
-function post(serviceNowTable, callback) {
+function get(serviceNowTable, callback) {
 
   // Initialize return arguments for callback
   let callbackData = null;
@@ -60,13 +60,13 @@ function post(serviceNowTable, callback) {
   // Some properties are read from global const options.
   // Some properties are passed into function get() through parameters.
   const requestOptions = {
-    method: 'POST',
+    method: 'GET',
     auth: {
       user: options.username,
       pass: options.password,
     },
     baseUrl: options.url,
-    uri: `/api/now/table/${serviceNowTable}`,
+    uri: `/api/now/table/${serviceNowTable}?sysparm_limit=1`,
   };
 
   // Send Request to ServiceNow.
@@ -97,24 +97,17 @@ function post(serviceNowTable, callback) {
 }
 
 
-/*
- * This section is used to test your project.
- * We will test both get() and post() functions.
- * If either function returns data, print the returned data to console on STDOUT.
- * If either function returns an error, print the returned data to the console on STDERR.
- */
+// This test function calls your request and logs any errors.
 function main() {
+  // Call function get().
+  // We are passing a static argument for parameter serviceNowTable.
+  // We are passing an anonymous function argument, a data-first callback,
+  // for parameter callback.
   get('change_request', (data, error) => {
     if (error) {
       console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
     }
     console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
-  });
-  post('change_request', (data, error) => {
-    if (error) {
-      console.error(`\nError returned from POST request:\n${JSON.stringify(error)}`);
-    }
-    console.log(`\nResponse returned from POST request:\n${JSON.stringify(data)}`)
   });
 }
 
