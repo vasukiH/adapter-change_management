@@ -42,47 +42,7 @@ class ServiceNowConnector {
    *   message in optional second argument to callback function.
    */
 
-  /**
-   * @memberof ServiceNowConnector
-   * @method get
-   * @summary Calls ServiceNow GET API
-   * @description Call the ServiceNow GET API. Sets the API call's method and query,
-   *   then calls this.sendRequest(). In a production environment, this method
-   *   should have a parameter for passing limit, sort, and filter options.
-   *   We are ignoring that for this course and hardcoding a limit of one.
-   *
-   * @param {iapCallback} callback - Callback a function.
-   * @param {(object|string)} callback.data - The API's response. Will be an object if sunnyday path.
-   *   Will be HTML text if hibernating instance.
-   * @param {error} callback.error - The error property of callback.
-   */
-  get(callback) {
-    let getCallOptions = { ...this.options };
-    getCallOptions.method = 'GET';
-    getCallOptions.query = 'sysparm_limit=1';
-    this.sendRequest(getCallOptions, (results, error) => callback(results, error));
-  }
-
-
-
-/**
- * @function post
- * @description Call the ServiceNow POST API. Sets the API call's method,
- *   then calls sendRequest().
- *
- * @param {object} callOptions - Passed call options.
- * @param {string} callOptions.serviceNowTable - The table target of the ServiceNow table API.
- * @param {iapCallback} callback - Callback a function.
- * @param {(object|string)} callback.data - The API's response. Will be an object if sunnyday path.
- *   Will be HTML text if hibernating instance.
- * @param {error} callback.error - The error property of callback.
- */
-post(callback) {
-     let getCallOptions = { ...this.options };
-    getCallOptions.method = 'POST';
-    this.sendRequest(getCallOptions, (results, error) => callback(results, error));
- 
-}
+  
 
 /**
  * @memberof ServiceNowConnector
@@ -145,6 +105,7 @@ processRequestResults(error, response, body, callback) {
    */
     let callbackData = null;
   let callbackError = null;
+  console.error(response);
   
    if (error) {
       console.error('Error present.');
@@ -158,6 +119,7 @@ processRequestResults(error, response, body, callback) {
     } else {
       callbackData = response;
     }
+    
     return callback(callbackData, callbackError);
 }
 
@@ -177,14 +139,15 @@ processRequestResults(error, response, body, callback) {
  *   Will be HTML text if hibernating instance.
  * @param {error} callback.error - The error property of callback.
  */
-sendRequest(callback) {
+sendRequest(callOptions,callback) {
   // Initialize return arguments for callback
-  let getCallOptions = { ...this.options };
   let uri;
-  if (getCallOptions.query)
-    uri = this.constructUri(getCallOptions.serviceNowTable, getCallOptions.query);
+  if (callOptions.query)
+    uri = this.constructUri(callOptions.serviceNowTable, callOptions.query);
   else
-    uri = this.constructUri(getCallOptions.serviceNowTable);
+    uri = this.constructUri(callOptions.serviceNowTable);
+    
+    
   /**
    * You must build the requestOptions object.
    * This is not a simple copy/paste of the requestOptions object
@@ -192,17 +155,61 @@ sendRequest(callback) {
    * hardcoded values.
    */
   const requestOptions = { 
-      method: getCallOptions.method,
+      method: callOptions.method,
     auth: {
-      user: getCallOptions.username,
-      pass: getCallOptions.password,
+      user: callOptions.username,
+      pass: callOptions.password,
     },
-    baseUrl: getCallOptions.url,
+    baseUrl: callOptions.url,
     uri: uri,};
+    
 	
   request(requestOptions, (error, response, body) => {
-    this.processRequestResults(error, response, body, (processedResults, processedError) => callback(processedResults, processedError));
-  })
+    this.processRequestResults(error, response, body, (processedResults, processedError) => callback(processedResults, processedError))
+  });
 }
+
+/**
+   * @memberof ServiceNowConnector
+   * @method get
+   * @summary Calls ServiceNow GET API
+   * @description Call the ServiceNow GET API. Sets the API call's method and query,
+   *   then calls this.sendRequest(). In a production environment, this method
+   *   should have a parameter for passing limit, sort, and filter options.
+   *   We are ignoring that for this course and hardcoding a limit of one.
+   *
+   * @param {iapCallback} callback - Callback a function.
+   * @param {(object|string)} callback.data - The API's response. Will be an object if sunnyday path.
+   *   Will be HTML text if hibernating instance.
+   * @param {error} callback.error - The error property of callback.
+   */
+  get(callback) {
+    let getCallOptions = { ...this.options };
+    getCallOptions.method = 'GET';
+    getCallOptions.query = 'sysparm_limit=1';
+    this.sendRequest(getCallOptions, (results, error) => callback(results, error));
+  }
+
+
+
+/**
+ * @function post
+ * @description Call the ServiceNow POST API. Sets the API call's method,
+ *   then calls sendRequest().
+ *
+ * @param {object} callOptions - Passed call options.
+ * @param {string} callOptions.serviceNowTable - The table target of the ServiceNow table API.
+ * @param {iapCallback} callback - Callback a function.
+ * @param {(object|string)} callback.data - The API's response. Will be an object if sunnyday path.
+ *   Will be HTML text if hibernating instance.
+ * @param {error} callback.error - The error property of callback.
+ */
+post(callback) {
+     let getCallOptions = { ...this.options };
+    getCallOptions.method = 'POST';
+    this.sendRequest(getCallOptions, (results, error) => callback(results, error));
+ 
+}
+
 }
 module.exports = ServiceNowConnector;
