@@ -105,8 +105,8 @@ processRequestResults(error, response, body, callback) {
    */
     let callbackData = null;
   let callbackError = null;
-  console.error(response);
-  
+ 
+
    if (error) {
       console.error('Error present.');
       callbackError = error;
@@ -119,7 +119,7 @@ processRequestResults(error, response, body, callback) {
     } else {
       callbackData = response;
     }
-    
+   
     return callback(callbackData, callbackError);
 }
 
