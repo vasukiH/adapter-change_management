@@ -36,21 +36,21 @@ const ServiceNowConnector = require(path.join(__dirname, './connector.js'));
 function mainOnObject() {
   // Instantiate an object from class ServiceNowConnector.
   const connector = new ServiceNowConnector(options);
+  
   // Test the object's get and post methods.
   // You must write the arguments for get and post.
-  connector.get(connector.responseData, error=> {
-    if (error) {
-      console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
+  connector.get((res, err) => {     
+    if (err) {
+      console.error(`\nError returned from GET request:\n${JSON.stringify(err)}`);
     }
-    console.log(`\nResponse returned from GET request:\n${JSON.stringify(connector.responseData)}`)
+    console.log(`\nResponse returned from GET request:\n${JSON.stringify(res)}`)
   });
-  connector.post(connector.responseData, error=> {
-    if (error) {
-      console.error(`\nError returned from POST request:\n${JSON.stringify(error)}`);
+  connector.post((res, err) => {     
+    if (err) {
+      console.error(`\nError returned from POST request:\n${JSON.stringify(err)}`);
     }
-    console.log(`\nResponse returned from POST request:\n${JSON.stringify(connector.responseData)}`)
+    console.log(`\nResponse returned from POST request:\n${JSON.stringify(res)}`)
   });
-
 }
 
 // Call mainOnObject to run it.
