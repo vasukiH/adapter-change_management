@@ -187,12 +187,7 @@ healthcheck(callback) {
      * get() takes a callback function.
      */
 
-     this.connector.get((res, err) => {     
-    if (err) {
-      console.error(`\nError returned from GET request:\n${JSON.stringify(err)}`);
-    }
-    console.log(`\nResponse returned from GET request:\n${JSON.stringify(res)}`)
-  });
+     this.connector.get((res, err) => callback{res, err});
   }
 
   /**
