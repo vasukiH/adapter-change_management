@@ -187,7 +187,7 @@ healthcheck(callback) {
      * get() takes a callback function.
      */
 
-     this.connector.get((res, err) => callback{res, err});
+     this.connector.get((res, err) => callback(res, err));
   }
 
   /**
