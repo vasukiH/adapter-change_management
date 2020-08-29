@@ -197,20 +197,21 @@ healthcheck(callback) {
         };
 
      this.connector.get((res, err) => {
-         if(res.body){
-            let response= res.body;
-            changeticket.change_ticket_number=response.number;
-            changeticket.active=response.active;
-            changeticket.priority=response.priority;
-            changeticket.description=response.description;
-            changeticket.work_start=response.work_start;
-            changeticket.work_end=response.work_end;
-            changeticket.change_ticket_key=response.sys_id;
+          if(res.body){
+            let response= JSON.parse(res.body);
+            for(let i=0; i<response.result.length; i++) {
+                       
+            changeticket.change_ticket_number=response.result[i].number;
+            changeticket.active=response.result[i].active;
+            changeticket.priority=response.result[i].priority;
+            changeticket.description=response.result[i].description;
+            changeticket.work_start=response.result[i].work_start;
+            changeticket.work_end=response.result[i].work_end;
+            changeticket.change_ticket_key=response.result[i].sys_id;
+            }
+          }
 
-
-         }
-
-return callback(changeticket, callbackError);
+return callback(changeticket, err);
      });
   }
 
@@ -242,18 +243,19 @@ return callback(changeticket, callbackError);
         };
 
      this.connector.post((res, err) => {
-         if(res.body){
-            let response= res.body;
-            changeticket.change_ticket_number=response.number;
-            changeticket.active=response.active;
-            changeticket.priority=response.priority;
-            changeticket.description=response.description;
-            changeticket.work_start=response.work_start;
-            changeticket.work_end=response.work_end;
-            changeticket.change_ticket_key=response.sys_id;
-         }
+            if(res.body){
+            let response= JSON.parse(res.body);                                   
+            changeticket.change_ticket_number=response.result[0].number;
+            changeticket.active=response.result[0].active;
+            changeticket.priority=response.result[0].priority;
+            changeticket.description=response.result[0].description;
+            changeticket.work_start=response.result[0].work_start;
+            changeticket.work_end=response.result[0].work_end;
+            changeticket.change_ticket_key=response.result[0].sys_id;
+            }
+          
 
-return callback(changeticket, callbackError);
+return callback(changeticket, err);
      });
   }
 }
