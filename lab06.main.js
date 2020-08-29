@@ -186,32 +186,8 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * get() takes a callback function.
      */
-  const changeticket = {
-            change_ticket_number: null,
-            active: null,
-            priority: null,
-            description:null,
-            work_start:null,
-            work_end:null,
-            change_ticket_key:null
-        };
 
-     this.connector.get((res, err) => {
-         if(res.body){
-            let response= res.body;
-            changeticket.change_ticket_number=response.number;
-            changeticket.active=response.active;
-            changeticket.priority=response.priority;
-            changeticket.description=response.description;
-            changeticket.work_start=response.work_start;
-            changeticket.work_end=response.work_end;
-            changeticket.change_ticket_key=response.sys_id;
-
-
-         }
-
-return callback(changeticket, callbackError);
-     });
+     this.connector.get((res, err) => callback(res, err));
   }
 
   /**
@@ -231,30 +207,12 @@ return callback(changeticket, callbackError);
      * post() takes a callback function.
      */
 
-     const changeticket = {
-            change_ticket_number: null,
-            active: null,
-            priority: null,
-            description:null,
-            work_start:null,
-            work_end:null,
-            change_ticket_key:null
-        };
-
-     this.connector.post((res, err) => {
-         if(res.body){
-            let response= res.body;
-            changeticket.change_ticket_number=response.number;
-            changeticket.active=response.active;
-            changeticket.priority=response.priority;
-            changeticket.description=response.description;
-            changeticket.work_start=response.work_start;
-            changeticket.work_end=response.work_end;
-            changeticket.change_ticket_key=response.sys_id;
-         }
-
-return callback(changeticket, callbackError);
-     });
+      this.connector.post((res, err) => {     
+    if (err) {
+      console.error(`\nError returned from POST request:\n${JSON.stringify(err)}`);
+    }
+    console.log(`\nResponse returned from POST request:\n${JSON.stringify(res)}`)
+  });
   }
 }
 
