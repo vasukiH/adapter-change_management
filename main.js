@@ -224,7 +224,15 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * get() takes a callback function.
      */
-  const changeticket = {
+  
+        
+const changetickets =[];
+     this.connector.get((res, err) => {
+          if(res.body){
+            let response= JSON.parse(res.body);
+            for(let i=0; i<response.result.length; i++) {
+                
+                const changeticket = {
             change_ticket_number: null,
             active: null,
             priority: null,
@@ -233,12 +241,6 @@ healthcheck(callback) {
             work_end:null,
             change_ticket_key:null
         };
-        
-
-     this.connector.get((res, err) => {
-          if(res.body){
-            let response= JSON.parse(res.body);
-            for(let i=0; i<response.result.length; i++) {
                        
             changeticket.change_ticket_number=response.result[i].number;
             changeticket.active=response.result[i].active;
@@ -247,11 +249,11 @@ healthcheck(callback) {
             changeticket.work_start=response.result[i].work_start;
             changeticket.work_end=response.result[i].work_end;
             changeticket.change_ticket_key=response.result[i].sys_id;
-            //changetickets.push(changeticket);
+            changetickets.push(changeticket);
             }
           }
 
-return callback(changeticket, err);
+return callback(changetickets, err);
      });
   }
 
@@ -285,13 +287,13 @@ return callback(changeticket, err);
      this.connector.post((res, err) => {
             if(res.body){
             let response= JSON.parse(res.body);                                   
-            changeticket.change_ticket_number=response.result[0].number;
-            changeticket.active=response.result[0].active;
-            changeticket.priority=response.result[0].priority;
-            changeticket.description=response.result[0].description;
-            changeticket.work_start=response.result[0].work_start;
-            changeticket.work_end=response.result[0].work_end;
-            changeticket.change_ticket_key=response.result[0].sys_id;
+            changeticket.change_ticket_number=response.result.number;
+            changeticket.active=response.result.active;
+            changeticket.priority=response.result.priority;
+            changeticket.description=response.result.description;
+            changeticket.work_start=response.result.work_start;
+            changeticket.work_end=response.result.work_end;
+            changeticket.change_ticket_key=response.result.sys_id;
             }
           
 
